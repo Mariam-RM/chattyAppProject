@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name: "bobbi"},
+      currentUser: {name: "anonymous"},
       messages: []
     }
 
@@ -48,24 +48,33 @@ class App extends Component {
       console.log('parsed message from server', msgJSON);
 
       this.setState({
-        currentUser: {name: msgJSON.username},
+        // currentUser: {name: msgJSON.username},
         messages: [...this.state.messages, msgJSON]
       })
+
+
+      // switch (json.type) {
+      //   case 'incomingMessage':
+      //     this.setState({
+      //       messages: [...this.state.messages, msgJSON]
+      //     });
+      //     break;
+      //   case 'incomingNotification':
+      //     // this.setState({ messages: json.messages });
+      //       console.log("user changed name!")
+      //     break;
+      //   default:
+      //     console.log("error")
+      // }
+
+      // this.setState({
+      //   // currentUser: {name: msgJSON.username},
+      //   messages: [...this.state.messages, msgJSON]
+      // })
 
       // console.log("state: ", this.set)
 
 
-      // switch (json.type) {
-      //   case 'text-message':
-      //     this.setState({
-      //       messages: [...this.state.messages, json]
-      //     });
-      //     break;
-      //   case 'initial-messages':
-      //     this.setState({ messages: json.messages });
-      //     break;
-      //   default:
-      // }
     };
 
 
@@ -84,35 +93,65 @@ class App extends Component {
         <MessageList messages={this.state.messages} />
       </main>
 
-        <ChatBar currentUser={this.state.currentUser} captureUser = {this.captureUser} addMessage={this.sendContent}  currentUser={this.state.currentUser.name}/>
+        <ChatBar  sendUser={this.sendUser} setUserState = {this.setUserState} addMessage={this.sendMsgToServer}  currentUser={this.state.currentUser.name}/>
 
       </div>
 
     );
   }
 
-  sendContent = (messageContent) => {
+  sendMsgToServer = (input, type) => {
     // e.preventDefault();
     const user = this.state.currentUser.name;
     // const {content} = messageContent;
 
     const objectToSend = {
+      type: type,
       username: user,
-      content: messageContent
+      content: input
     }
 
     this.socket.send(JSON.stringify(objectToSend));
   }
 
-  captureUser = (user) => {
+   sendUser = (newUser, type) => {
+    // e.preventDefault();
+    const oldUser = this.state.currentUser.name;
+    // const {content} = messageContent;
+
+    const objectToSend = {
+      type: type,
+      username: oldUser,
+      content: newUser
+    }
+
+    this.socket.send(JSON.stringify(objectToSend));
+  }
+
+  setUserState = (user) => {
     this.setState({
         currentUser: {name: user}
     })
 
-    let newUser = this.state.currentUser.name;
+    console.log("user set to: ", user)
 
-    return newUser
   }
+
+  // changeType = (target) => {
+
+  //   let msgType = ""
+
+  //   if (target === "chatMessage"){
+  //     let msgType = "incomingMessage"
+  //   } else if (target === "user"){
+  //     let msgType = "incomingNotification"
+  //   } else {
+  //     console.log("error")
+  //   }
+
+  //   return msgType
+
+  // }
 
 
 
