@@ -34,15 +34,52 @@ wss.broadcast = data => {
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
-  const clientAddedObj = {
-    type: 'clientUpdate',
-    total: wss.clients.size,
-    id: uuid()
+  const chatStartObj = {
+      type: 'clientUpdate',
+      total: wss.clients.size,
+      content: 'Chat now active - type away !',
+      id: uuid()
+    }
+
+   ws.send(JSON.stringify(chatStartObj))
+
+
+
+
+
+  if (wss.clients.size > 1){
+
+    const clientAddedObj = {
+      type: 'clientUpdate',
+      total: wss.clients.size,
+      content: 'A new user joined the chat - Welcome!',
+      id: uuid()
+    }
+
+    wss.broadcastJSON(clientAddedObj)
+
   }
 
-  wss.broadcastJSON(clientAddedObj)
 
-  console.log("these are the clients added: ",clientAddedObj)
+
+  // } else {
+
+  //    const clientAddedObj = {
+  //     type: 'clientUpdate',
+  //     total: wss.clients.size,
+  //     content: 'Chat now active - type away !',
+  //     id: uuid()
+  //   }
+
+  //   wss.broadcastJSON(clientAddedObj)
+  // }
+
+
+
+
+
+
+  // console.log("these are the clients added: ",clientAddedObj)
 
 
 
@@ -98,6 +135,7 @@ wss.on('connection', (ws) => {
       const clientRemovedObj = {
         type: 'clientUpdate',
         total: wss.clients.size,
+        content: 'a user has left the chat',
         id: uuid()
       }
 
