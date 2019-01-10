@@ -6,7 +6,7 @@ class MessageList extends Component {
   render (){
     const messageArray = this.props.messages ;
     const messageItem = messageArray.map( message => {
-      return <Message key ={message.id} messageData={message} />
+      return <Message key ={Math.random()} messageData={message} />
     })
 
     return (

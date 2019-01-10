@@ -50,25 +50,27 @@ class App extends Component {
       const msgJSON = JSON.parse(payload.data);
       console.log('parsed message from server', msgJSON);
 
-      this.setState({
-        // currentUser: {name: msgJSON.username},
-        messages: [...this.state.messages, msgJSON]
-      })
-
-
       switch (msgJSON.type) {
         case 'incomingMessage':
+           this.setState({
+            messages: [...this.state.messages, msgJSON]
+          });
+
+           console.log("incoming message added to messageLIst", this.state.messages)
+          break;
         case 'incomingNotification':
           this.setState({
             messages: [...this.state.messages, msgJSON]
           });
+          console.log("notification added to message list", this.state.messages)
           break;
         case 'clientUpdate':
           this.setState({
+            messages: [...this.state.messages, msgJSON],
             clients: msgJSON.total
           });
           // this.setState({ messages: json.messages });
-            console.log("user changed added")
+            console.log("user changed added", this.state.messages)
           break;
         default:
           console.log("error")
