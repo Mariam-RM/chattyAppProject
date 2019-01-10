@@ -46,17 +46,21 @@ class ChatBar extends Component {
 
       if(e.key == 'Enter'){
 
-        // if(e.target.value === ''){
-        // //   setUserState('anonymous')
-        // // } else {
-        //    this.props.sendUser(e.target.value, "incomingMessage")
+        if(e.target.value === ''){
+          this.props.sendUser('anonymous', "incomingNotification")
+          this.props.setUserState('anonymous')
+        } else {
 
-        //
+           this.props.sendUser(e.target.value, "incomingNotification")
 
-        // }
-          this.props.sendUser(e.target.value, "incomingNotification")
+           this.props.setUserState(e.target.value)
 
-         this.props.setUserState(e.target.value)
+
+
+        }
+         //  this.props.sendUser(e.target.value, "incomingNotification")
+
+         // this.props.setUserState(e.target.value)
 
 
 
@@ -64,15 +68,15 @@ class ChatBar extends Component {
 
       // this.props.sendUser(e.target.value, "incomingMessage")
 
-      console.log("user before state updated", this.props.currentUser)
+      // console.log("user before state updated", this.props.currentUser)
 
-      // this.props.setUserState(e.target.value)
-
-
+      // // this.props.setUserState(e.target.value)
 
 
 
-      console.log("user after state updated", this.props.currentUser)
+
+
+      // console.log("user after state updated", this.props.currentUser)
 
 
       }

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 import messageObj from './messages.json';
+import ClientCounter from './ClientCounter.jsx'
 
 class App extends Component {
 
@@ -10,7 +11,8 @@ class App extends Component {
 
     this.state = {
       currentUser: {name: "anonymous"},
-      messages: []
+      messages: [],
+      clients : 0
     }
 
   }
@@ -34,6 +36,7 @@ class App extends Component {
 
     this.socket.onopen = () => {
       console.log('Connected to WebSocket')
+      console.log("chat active")
       // this.socket.send("is this working?");
     };
 
@@ -53,19 +56,23 @@ class App extends Component {
       })
 
 
-      // switch (json.type) {
-      //   case 'incomingMessage':
-      //     this.setState({
-      //       messages: [...this.state.messages, msgJSON]
-      //     });
-      //     break;
-      //   case 'incomingNotification':
-      //     // this.setState({ messages: json.messages });
-      //       console.log("user changed name!")
-      //     break;
-      //   default:
-      //     console.log("error")
-      // }
+      switch (msgJSON.type) {
+        case 'incomingMessage':
+        case 'incomingNotification':
+          this.setState({
+            messages: [...this.state.messages, msgJSON]
+          });
+          break;
+        case 'clientUpdate':
+          this.setState({
+            clients: msgJSON.total
+          });
+          // this.setState({ messages: json.messages });
+            console.log("user changed added")
+          break;
+        default:
+          console.log("error")
+      }
 
       // this.setState({
       //   // currentUser: {name: msgJSON.username},
@@ -88,6 +95,7 @@ class App extends Component {
       <div>
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
+        <ClientCounter count={this.state.clients} />
       </nav>
       <main className="messages">
         <MessageList messages={this.state.messages} />
@@ -137,6 +145,7 @@ class App extends Component {
 
   }
 
+
   // changeType = (target) => {
 
   //   let msgType = ""
@@ -158,6 +167,12 @@ class App extends Component {
 
 
 }
+
+
+  //  class ClientCount extends Component {
+  //   <div className="clientCounter"> {this.state.clients} </div>
+  // }
+
 
 
 
