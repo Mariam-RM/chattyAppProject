@@ -12,8 +12,8 @@ A basic instant messaging app that was created with React, WebSockets, Webpack, 
 5. Go to <http://localhost:3000/> in your browser.
 
 ### Screenshots
-![screenshot of initial chat page](https://github.com/Mariam-RM/Tweeter-Project/blob/master/screenshots/main-page.png?raw=true)
-![screenshot of conversation with mutiple users](https://github.com/Mariam-RM/Tweeter-Project/blob/master/screenshots/multiple-tweets.png?raw=true)
+![screenshot of initial chat page](https://github.com/Mariam-RM/chattyAppProject/blob/master/screenshots/chatty-example-firstuser.png)
+![screenshot of conversation with mutiple users](https://github.com/Mariam-RM/chattyAppProject/blob/master/screenshots/active-chat.png)
 
 ### Dependencies
 
