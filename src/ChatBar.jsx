@@ -1,115 +1,27 @@
 import React, {Component} from 'react';
 
-// class NewMessage extends Component {
-//   render(){
-//     const onChange = (e) => {
-//       const input = e.target.ele
-//     }
-
-//   }
-// }
-
-// function (){
-//   const onEnter = (e) => {
-//     this.props.addMessage(e.target.elements.chatMessage)
-//   }
-// }
-
-// changeType = (target) => {
-
-  //   let msgType = ""
-
-  //   if (target === "chatMessage"){
-  //     let msgType = "incomingMessage"
-  //   } else if (target === "user"){
-  //     let msgType = "incomingNotification"
-  //   } else {
-  //     console.log("error")
-  //   }
-
-  //   return msgType
-
-  // }
-
-
-
 class ChatBar extends Component {
-
   render() {
-
-
-
-  const handleUserEnter = (e) => {
-
-    // const newUser = e.target.value
-    // const currentU = this.props.currentUser
-
+//function that handles the username when enter key pressed and sets the state to new username
+    const handleUserEnter = (e) => {
       if(e.key == 'Enter'){
-
         if(e.target.value === ''){
           this.props.sendUser('anonymous', "incomingNotification")
           this.props.setUserState('anonymous')
         } else {
-
-           this.props.sendUser(e.target.value, "incomingNotification")
-
-           this.props.setUserState(e.target.value)
-
-
-
+          this.props.sendUser(e.target.value, "incomingNotification")
+          this.props.setUserState(e.target.value)
         }
-         //  this.props.sendUser(e.target.value, "incomingNotification")
-
-         // this.props.setUserState(e.target.value)
-
-
-
-
-
-      // this.props.sendUser(e.target.value, "incomingMessage")
-
-      // console.log("user before state updated", this.props.currentUser)
-
-      // // this.props.setUserState(e.target.value)
-
-
-
-
-
-      // console.log("user after state updated", this.props.currentUser)
-
-
       }
-
-
-  }
-
-  const handleMsgEnter = (e) => {
-
-
-      if(e.key == 'Enter'){
-
-
-
+    }
+//function that handles the content entered in the message input field
+    const handleMsgEnter = (e) => {
+      if(e.key == 'Enter' && e.target.value !== ""){
         this.props.addMessage(e.target.value, "incomingMessage")
 
-
-        console.log("current target", e.target.name)
-
-        // this.props.captureUser(this.props.currentUser)
-
-
-
         e.target.value = "";
-
       }
-  }
-
-    // const handleInput = e => {
-    //   // this.props.captureUser(this.props.currentUser)
-    //   console.log("focusing")
-    //   console.log("what?   ",e.target.parentElement.name)
-    // }
+    }
 
     return (
       <footer className="chatbar">

@@ -17,83 +17,41 @@ class App extends Component {
 
   }
 
-
-
   componentDidMount() {
-    console.log("componentDidMount <App />");
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
-    //   // Add a new message to the list of messages in the data store
-    //   // const newMessage = {id: 3, username: "Michelle", content: "Hello there!", type:"incomingMessage"};
-    //   // const messages = this.state.messages.concat(newMessage)
-    //   // Update the state of the app component.
-    //   // Calling setState will trigger a call to render() in App and all child components.
-    //   // this.setState({messages: messages})
-    //   this.sendContent("Hello there General Kenobi!")
-    // }, 3000);
-
     this.socket = new WebSocket('ws://localhost:3001');
 
-    this.socket.onopen = () => {
-      console.log('Connected to WebSocket')
-      console.log("chat active")
-      // this.socket.send("is this working?");
-    };
-
-    this.socket.onclose = () => {
-      console.log('Disconnected from the WebSocket');
-    };
-
     this.socket.onmessage = (payload) => {
-      // const prsedPayload = JSON.parse(payload)
-      console.log('Got message from server', payload);
+  //variable contianing parsed data recieved from server
       const msgJSON = JSON.parse(payload.data);
-      console.log('parsed message from server', msgJSON);
-
+  //switch function to handle messages recieved by the server depending on their type
       switch (msgJSON.type) {
         case 'incomingMessage':
            this.setState({
             messages: [...this.state.messages, msgJSON]
           });
 
-           console.log("incoming message added to messageLIst", this.state.messages)
           break;
         case 'incomingNotification':
           this.setState({
             messages: [...this.state.messages, msgJSON]
           });
-          console.log("notification added to message list", this.state.messages)
+
           break;
         case 'clientUpdate':
           this.setState({
             messages: [...this.state.messages, msgJSON],
             clients: msgJSON.total
           });
-          // this.setState({ messages: json.messages });
-            console.log("user changed added", this.state.messages)
+
           break;
         default:
           console.log("error")
       }
-
-      // this.setState({
-      //   // currentUser: {name: msgJSON.username},
-      //   messages: [...this.state.messages, msgJSON]
-      // })
-
-      // console.log("state: ", this.set)
-
-
     };
-
-
   }
 
   render() {
-
-
     return (
-
       <div>
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
@@ -102,80 +60,39 @@ class App extends Component {
       <main className="messages">
         <MessageList messages={this.state.messages} />
       </main>
-
         <ChatBar  sendUser={this.sendUser} setUserState = {this.setUserState} addMessage={this.sendMsgToServer}  currentUser={this.state.currentUser.name}/>
-
       </div>
-
     );
   }
 
+//function to send message to server
   sendMsgToServer = (input, type) => {
-    // e.preventDefault();
     const user = this.state.currentUser.name;
-    // const {content} = messageContent;
-
     const objectToSend = {
       type: type,
       username: user,
       content: input
     }
-
     this.socket.send(JSON.stringify(objectToSend));
   }
 
-   sendUser = (newUser, type) => {
-    // e.preventDefault();
+//function to send user info to server
+  sendUser = (newUser, type) => {
     const oldUser = this.state.currentUser.name;
-    // const {content} = messageContent;
-
     const objectToSend = {
       type: type,
       username: oldUser,
       content: newUser
     }
-
     this.socket.send(JSON.stringify(objectToSend));
   }
 
+//function to update user state
   setUserState = (user) => {
     this.setState({
         currentUser: {name: user}
     })
-
-    console.log("user set to: ", user)
-
   }
-
-
-  // changeType = (target) => {
-
-  //   let msgType = ""
-
-  //   if (target === "chatMessage"){
-  //     let msgType = "incomingMessage"
-  //   } else if (target === "user"){
-  //     let msgType = "incomingNotification"
-  //   } else {
-  //     console.log("error")
-  //   }
-
-  //   return msgType
-
-  // }
-
-
-
-
-
 }
-
-
-  //  class ClientCount extends Component {
-  //   <div className="clientCounter"> {this.state.clients} </div>
-  // }
-
-
-
 
 export default App;
