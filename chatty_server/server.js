@@ -26,13 +26,10 @@ wss.broadcast = data => {
   });
 };
 
-
-
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
-  console.log('Client connected');
 
   const chatStartObj = {
       type: 'clientUpdate',
@@ -41,12 +38,10 @@ wss.on('connection', (ws) => {
       id: uuid()
     }
 
+//send all clients a notification when they joined the chat that it is now active
    ws.send(JSON.stringify(chatStartObj))
 
-
-
-
-
+//broadcast a notification to all clients whenever someone joins a chat
   if (wss.clients.size > 1){
 
     const clientAddedObj = {
@@ -59,30 +54,6 @@ wss.on('connection', (ws) => {
     wss.broadcastJSON(clientAddedObj)
 
   }
-
-
-
-  // } else {
-
-  //    const clientAddedObj = {
-  //     type: 'clientUpdate',
-  //     total: wss.clients.size,
-  //     content: 'Chat now active - type away !',
-  //     id: uuid()
-  //   }
-
-  //   wss.broadcastJSON(clientAddedObj)
-  // }
-
-
-
-
-
-
-  // console.log("these are the clients added: ",clientAddedObj)
-
-
-
 
   ws.on('message', data => {
     const objData = JSON.parse(data)
@@ -97,12 +68,12 @@ wss.on('connection', (ws) => {
           content: objData.content,
           id: uuid()
         }
-          console.log(`this is the user: ${objData.username} this is the type ${objData.type} this is the content ${objData.content}`);
 
         wss.broadcastJSON(messageObj)
 
         break;
       case "incomingNotification":
+        // handle incoming notification
 
         const notificationObj = {
           type: objData.type,
@@ -111,7 +82,6 @@ wss.on('connection', (ws) => {
           id: uuid()
         }
 
-        console.log("this is the notification obj received by erver, ", notificationObj)
         // handle incoming notification
 
          wss.broadcastJSON(notificationObj)
@@ -120,17 +90,10 @@ wss.on('connection', (ws) => {
         // show an error in the console if the message type is unknown
         throw new Error("Unknown event type " + data.type);
     }
-
-
-    // ws.send(JSON.stringify(sendObj))
-
-    // console.log("whtas the data?: ", objData)
-
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
-    console.log('Client disconnected')
 
       const clientRemovedObj = {
         type: 'clientUpdate',
@@ -140,9 +103,6 @@ wss.on('connection', (ws) => {
       }
 
       wss.broadcastJSON(clientRemovedObj)
-
-      console.log("these are the clients added: ",clientRemovedObj)
-
   });
 
 
